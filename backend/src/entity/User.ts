@@ -1,5 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, BeforeInsert } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, BeforeInsert, AfterInsert, AfterUpdate, BeforeUpdate, AfterLoad } from 'typeorm';
 import { IsDefined, IsEmail, Length, validateOrReject } from 'class-validator';
+import { AppDataSource } from '../data-source';
+
 
 @Entity()
 export class User {
@@ -15,7 +17,6 @@ export class User {
     @IsDefined({ message: "Nachname ist erforderlich" })
     @Length(3, 100)
     lastName!: string;
-
 
     @Column({ type: "varchar", length: 100, unique: true })
     @IsEmail()
@@ -33,12 +34,10 @@ export class User {
     confirmed: UserConfirmedEnum;
 
     @OneToMany(() => Phone, (phone) => phone.user, { cascade: true })
-    phone: Phone[]
+    phone: Phone[];
 
-
-  
     @OneToMany(() => Email, (email) => email.user, { cascade: true })
-    emails: Email[]
+    emails: Email[];
 
     @OneToMany(() => Address, (address) => address.user, { cascade: true })
     address: Address[];
@@ -54,23 +53,70 @@ export class User {
 
     @BeforeInsert()
     async hashPassword() {
-        this.password = await bcrypt.hash(this.password, 10)
+        this.password = await bcrypt.hash(this.password, 10);
     }
 
     @BeforeInsert()
     async validate() {
-        await validateOrReject(this, {skipUndefinedProperties: true});
+        await validateOrReject(this, { skipUndefinedProperties: true });
     }
 
+    @AfterInsert()
+    async userLog() {
+        const logRepository = AppDataSource.getRepository(Log);
+        const log = new Log();
+        log.type = "user";
+        log.process = `Neu Benutzer erstellt: ${this.id} ${this.email} ${this.firstName} ${this.lastName}`;
+        log.user = this.id;
 
-    
+        try {
+            await logRepository.save(log);
+        } catch (error) {
+            console.error("Error saving log:", error);
+            // Handle the error appropriately (e.g., send notifications, etc.)
+        }
+    }
 
+    @BeforeUpdate()
+    async userBeforeUpdateLog() {
+        console.log("********");
 
+        const logRepository = AppDataSource.getRepository(Log);
+        const log = new Log();
+        log.type = "user";
+        log.process = `Vor Aktualisierung des Benutzers: ${this.id} ${this.email} ${this.firstName} ${this.lastName}`;
+        log.user = this.id;
 
+        try {
+            await logRepository.save(log);
+        } catch (error) {
+            console.error("Fehler beim Speichern des Logs:", error);
+            // Fehler entsprechend behandeln (z.B. Benachrichtigungen senden, etc.)
+        }
+    }
 
+    @AfterUpdate()
+    async userAfterUpdateLog() {
+        console.log("-----");
 
+        const logRepository = AppDataSource.getRepository(Log);
+        const log = new Log();
+        log.type = "user";
+        log.process = `Nach Aktualisierung des Benutzers: ${this.id} ${this.email} ${this.firstName} ${this.lastName}`;
+        log.user = this.id;
 
+        try {
+            await logRepository.save(log);
+        } catch (error) {
+            console.error("Fehler beim Speichern des Logs:", error);
+            // Fehler entsprechend behandeln (z.B. Benachrichtigungen senden, etc.)
+        }
+    }
 
+    fullName: string;
 
-
+    @AfterLoad()
+    afterLoad() {
+        this.fullName = `${this.firstName} ${this.lastName}`;
+    }
 }
