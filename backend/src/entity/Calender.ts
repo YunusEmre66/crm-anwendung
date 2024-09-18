@@ -1,4 +1,4 @@
-import { AfterInsert, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { AfterInsert, AfterLoad, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { AppDataSource } from "../data-source";
 
 
@@ -51,8 +51,26 @@ export class Calender {
         await logRepository.save(log)
     )
 
+participantsUser: User[];
 
 
+participants: User[];
 
+participantsUser: User[] = [];
 
+@AfterLoad()
+async afterLoad() {
+    if (this.participants && this.participants.length > 0) {
+        console.log("participantsUser", this.participants);
+        const participants = this.participants.map((participant: any) => participant.id);
+        const userRepository = AppDataSource.getRepository(User);
+        const users = await userRepository.find({
+            where: { id: In(participants) },
+            select: ["id", "firstName", "lastName"],
+        });
+        this.participantsUser = users;
+    } else {
+        this.participantsUser = [];
+    }
+}
 }
