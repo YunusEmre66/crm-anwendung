@@ -1,18 +1,19 @@
 import * as express from "express"
 import * as bodyParser from "body-parser"
-import { Request, Response } from "express"
+import { Request, Response, NextFunction} from "express"
 import { AppDataSource } from "./data-source"
 import { Routes } from "./routes"
 import { User } from "./entity/User"
 require('dotenv').config();
 import cors = require("cors")
 import {getUserFromJWT} from "./utility/getUserFromJWT";
+import { error } from "console"
 
 const PORT = process.env.PORT || 3000;
 
 AppDataSource.initialize().then(async () => {
 
-    // create express app
+    //! create express app
     const app = express()
     app.use(bodyParser.json())
     app.use(express.static('public '))
@@ -37,14 +38,15 @@ AppDataSource.initialize().then(async () => {
                 } else {
                     response.status(401).json ({status :false, message : "Autorisierungsfehler. Bitte wenden Sie sich an den Administrator."})
                 }
-            } catch (error) {
+            } catch (error :any) {
+                response.status(401).json ({ status : false, message : error.message})
                 
             }
             
         }
     })
 
-    // register express routes from defined application routes
+    //! register express routes from defined application routes
     Routes.forEach(route => {
         (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
             const result = (new (route.controller as any))[route.action](req, res, next)
@@ -57,10 +59,18 @@ AppDataSource.initialize().then(async () => {
         })
     })
 
-    // setup express app here
-    // ...
+    app.use((error: any, request: Request, response: Response, next: NextFunction) => {
+        return response.status(error.status).json({  
+            status: false,  
+            code: error.error.code, 
+            errno: error.error.errno,
+            message: error.error.message 
+        })
+     })
 
-    // start express server
+    
+
+    //! start express server
     app.listen(PORT)
 
     // insert new users for test
