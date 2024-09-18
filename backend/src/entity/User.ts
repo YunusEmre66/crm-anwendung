@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-import { IsDefined, Length } from 'class-validator';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { IsDefined, IsEmail, Length } from 'class-validator';
 
 @Entity()
 export class User {
@@ -12,8 +12,32 @@ export class User {
     firstName!: string;
 
     @Column({ type: 'varchar', length: 100, nullable: false })
-    lastName!: string; 
+    @IsDefined({ message: "Nachname ist erforderlich" })
+    @Length(3, 100)
+    lastName!: string;
 
-    @Column({ type: 'varchar', length: 15, nullable: true })
-    phone?: string; // Changed phone type to string for better handling of numbers and added optional
+
+    @Column({ type: "varchar", length: 100, unique: true })
+    @IsEmail()
+    email: string;
+
+    @Column()
+    @IsDefined({ message: "Password ist erforderlich" })
+    @Length(6, 100)
+    password: string;
+
+    @Column({type:"enum", enum: UserRoleEnum, default:UserRoleEnum.USER, nullable :false})
+    role:UserRoleEnum;
+
+    @Column({type:"enum", enum:UserConfirmedEnum, default:UserConfirmedEnum.PENDING, nullabla:false})
+    confirmed: UserConfirmedEnum;
+
+    @OneToMany(() => Phone, (phone) => phone.user, {cascade: true})
+
+
+
+
+
+
+
 }
