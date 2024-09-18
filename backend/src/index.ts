@@ -6,7 +6,7 @@ import { Routes } from "./routes"
 import { User } from "./entity/User"
 require('dotenv').config();
 import cors = require("cors")
-import {getUserFromJWT} from "./utility/getUserFromJWT";
+import {getUserFromJWT} from "./utility/getUserIdFromJWT";
 import { error } from "console"
 
 const PORT = process.env.PORT || 3000;
