@@ -4,5 +4,5 @@ node_modules/
 build/
 tmp/
 temp/
-kurulumbilgileri-ve-notlar
-.env
+/kurulumbilgileri-ve-notlar
+/.env
