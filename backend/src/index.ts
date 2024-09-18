@@ -25,6 +25,21 @@ AppDataSource.initialize().then(async () => {
         if (request.url.endsWith('login') ||request.url.endsWith('/register')) {
             next();
         } else {
+
+            try {
+                const user : any =await getUserFromJWT(request) 
+                if (user.confirmed ==='approval' || user.confirmed === 'email') {
+                    if (request.url.endsWith('is-login')) {
+                        response.status(200).json({status:true})
+                    } else {
+                        next()
+                    }
+                } else {
+                    response.status(401).json ({status :false, message : "Autorisierungsfehler. Bitte wenden Sie sich an den Administrator."})
+                }
+            } catch (error) {
+                
+            }
             
         }
     })
