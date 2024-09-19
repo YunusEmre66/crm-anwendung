@@ -14,10 +14,10 @@ export class UserInfo {
     user: User
 
     @CreateDateColumn({ nullable: false})
-    createAt :Date;
+    createdAt :Date;
 
     @UpdateDateColumn({ nullable: false})
-    updateAt : Date;
+    updatedAt : Date;
 
     @DeleteDateColumn()
     deleteAt: Date;

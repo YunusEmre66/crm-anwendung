@@ -42,10 +42,10 @@ export class Address {
     town: Town;
 
     @CreateDateColumn()
-    createAt: Date;
+    createdAt: Date;
 
     @UpdateDateColumn()
-    updateAt: Date;
+    updatedAt: Date;
 
     @DeleteDateColumn()
     deleteAt: Date;

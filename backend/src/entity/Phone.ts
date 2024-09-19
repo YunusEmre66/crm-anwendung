@@ -23,10 +23,10 @@ export class Phone {
     user: User;
 
     @CreateDateColumn()
-    createAt: Date;
+    createdAt: Date;
 
     @UpdateDateColumn()
-    updateAt: Date;
+    updatedAt: Date;
 
     @DeleteDateColumn()
     deleteAt: Date;

@@ -32,10 +32,10 @@ export class Calender {
     participants: Number[]; //teilnehmer
 
     @CreateDateColumn()
-    createAt: Date;
+    createdAt: Date;
 
     @UpdateDateColumn({ nullable: true })
-    updateAt; Date
+    updatedAt; Date
 
     @DeleteDateColumn({ nullable: true }) 
     deletedAt: Date;

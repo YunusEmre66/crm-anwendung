@@ -12,7 +12,7 @@ import {
     AfterUpdate,
     AfterLoad,
 } from "typeorm";
-import { validateOrReject, IsDefined, IsEmail, Length } from "class-validator"; //! validator : veri doğrulama işlemleri için kullanılır.
+import { validateOrReject, IsDefined, IsEmail, Length } from "class-validator";
 import { Phone } from "./Phone";
 import { Email } from "./Email";
 import { Address } from "./Address";
@@ -63,10 +63,10 @@ export class User {
     address: Address[];
 
     @CreateDateColumn({ select: true })
-    createAt: Date;
+    createdAt: Date;
 
     @UpdateDateColumn({ select: true, nullable: true })
-    updateAt: Date;
+    updatedAt: Date;
 
     @DeleteDateColumn({ select: true, nullable: true })
     deleteAt: Date;
@@ -105,45 +105,54 @@ export class User {
 
 
 
-    @BeforeUpdate()
-    async userBeforeUpdateLog() {
-        console.log("********");
-
-        const logRepository = AppDataSource.getRepository(Log);
-        const log = new Log();
-        type = "user";
-        process = `Vor Aktualisierung des Benutzers: ${this.id} ${this.email} ${this.firstName} ${this.lastName}`;
-        log.user = this.id;
-
-        try {
-            await logRepository.save(log);
-        } catch (error) {
-            console.error("Fehler beim Speichern des Logs:", error);
-            // Fehler entsprechend behandeln (z.B. Benachrichtigungen senden, etc.)
-        }
-    }
-
     @AfterUpdate()
     async userAfterUpdateLog() {
-        console.log("-----");
+        console.log("----");
 
         const logRepository = AppDataSource.getRepository(Log);
-        const log = new Log();
-        type = "user";
-        process = `Nach Aktualisierung des Benutzers: ${this.id} ${this.email} ${this.firstName} ${this.lastName}`;
-        log.user = this.id;
+        const log = Object.assign(new Log(), {
+            type: "user",
+            process:
+                "Vor Aktualisierung des Benutzers: > " +
+                this.email +
+                " " +
+                this.firstName +
+                " " +
+                this.lastName,
+            user: this.id,
+        });
 
-        try {
-            await logRepository.save(log);
-        } catch (error) {
-            console.error("Fehler beim Speichern des Logs:", error);
-            // Fehler entsprechend behandeln (z.B. Benachrichtigungen senden, etc.)
-        }
+        logRepository.save(log);
+    }
+
+
+
+    @BeforeUpdate()
+    async userBeforeUpdateLog() {
+
+        console.log("****");
+
+        const logRepository = AppDataSource.getRepository(Log);
+        const log = Object.assign(new Log(), {
+            type: "user",
+            process:
+                " Nach Aktualisierung des Benutzers: " +
+                this.email +
+                " " +
+                this.firstName +
+                " " +
+                this.lastName,
+            user: this.id,
+        });
+
+        logRepository.save(log);
     }
 
     fullName: string;
 
     @AfterLoad()
+
+
     afterLoad() {
         this.fullName = `${this.firstName} ${this.lastName}`;
     }
