@@ -34,7 +34,7 @@ export class Email {
         const logRepository = AppDataSource.getRepository(Log);
         const log = Object.assign(new Log(), {
             type: 'phone',
-            process: 'phone Info',
+            process: 'Phone Info',
             user: this.user
         });
 

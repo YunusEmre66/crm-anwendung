@@ -1,5 +1,4 @@
 
-
 export enum LogTypeEnum {
     ADDRESS = 'address',
     CALENDER = 'calender',

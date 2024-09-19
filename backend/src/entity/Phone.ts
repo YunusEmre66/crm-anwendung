@@ -5,6 +5,7 @@ import { Log } from "./Log"
 import { ContactEnum } from "../enum/ContactEnum"
 
 
+
 @Entity()
 export class Phone {
 

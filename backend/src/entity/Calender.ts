@@ -3,6 +3,7 @@ import { User } from "./User";
 import { AppDataSource } from "../data-source";
 import { Log } from "./Log";
 import { CalenderEnum } from "../enum/CalenderEnum";
+
 @Entity()
 
 export class Calender {
@@ -14,7 +15,7 @@ export class Calender {
 
     calenderType: CalenderEnum;
 
-    @Column({ type: "varchar" length: 250, nullable: false })
+    @Column({ type: "varchar", length: 250, nullable: false })
     title: string;
 
     @Column({ type: "text", nullable: true })
@@ -27,7 +28,7 @@ export class Calender {
     @JoinColumn({ name: "userId" })
     user: User;
 
-    @Column({ type: "json", nullable: true: })
+    @Column({ type: "json", nullable: true })
     participants: Number[]; //teilnehmer
 
     @CreateDateColumn()
@@ -36,42 +37,37 @@ export class Calender {
     @UpdateDateColumn({ nullable: true })
     updateAt; Date
 
-    @DeleteDateColumn({ nullable: true })
-    deleteAt; Date
+    @DeleteDateColumn({ nullable: true }) 
+    deletedAt: Date;
 
-    @AfterInsert(
-        async userLog()
-        const logRepository = AppDataSource.getRepository(Log);
 
-    const log = Object.assign(new Log(), {
+    @AfterInsert()
+    async userLog() {
+      const logRepository = AppDataSource.getRepository(Log);
+      const log = Object.assign(new Log(), {
         type: "calender",
-        process: "new celender information",
+        process: "neu calender wurde erstellt",
         user: this.user,
-    });
-
-        await logRepository.save(log)
-    )
-
-participantsUser: User[];
-
-
-participants: User[];
-
-participantsUser: User[] = [];
-
-@AfterLoad()
-async afterLoad() {
-    if (this.participants && this.participants.length > 0) {
-        console.log("participantsUser", this.participants);
-        const participants = this.participants.map((participant: any) => participant.id);
-        const userRepository = AppDataSource.getRepository(User);
-        const users = await userRepository.find({
-            where: { id: In(participants) },
-            select: ["id", "firstName", "lastName"],
-        });
-        this.participantsUser = users;
-    } else {
-        this.participantsUser = [];
+      });
+  
+      logRepository.save(log);
     }
-}
-}
+
+    participantsUser: User[]; 
+
+    @AfterLoad()  
+    async afterLoad() {  
+      if (this.participants) {
+        console.log("participantsUser", this.participants); 
+        const participants = this.participants.map((k: any) => k.id); 
+        const userRepository = AppDataSource.getRepository(User);  
+        const user = await userRepository.find({ 
+          where: { id: In(participants) }, 
+          select: { id: true, firstName: true, lastName: true }
+        });
+        this.participantsUser = user; 
+      } else { 
+        this.participantsUser = [];  
+      }
+    }
+  }

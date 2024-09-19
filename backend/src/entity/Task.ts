@@ -4,6 +4,7 @@ import { AppDataSource } from "../data-source"
 import { Log } from "./Log"
 import { TaskEnum } from "../enum/TaskEnum"
 import { TaskStatus } from "../enum/TaskStatus"
+
 @Entity()
 export class Task {
 
@@ -43,7 +44,7 @@ export class Task {
         const logRepository = AppDataSource.getRepository(Log);
         const log = Object.assign(new Log(), {
             type: 'task',
-            process: 'wurde task gegeben ' + this.responsible,
+            process: 'Aufgabe wurde vergeben' + this.responsible,
             user: this.user
         });
         await logRepository.save(log);

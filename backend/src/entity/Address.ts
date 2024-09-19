@@ -21,9 +21,6 @@ export class Address {
     @Column({ nullable: true, length: 30 })
     location: string;
 
-    @Column()
-    @Column()
-
     @ManyToOne(() => User, (user) => user.id, { onDelete: 'CASCADE', nullable: false })
     @JoinColumn({ name: "userId" })
     user: User;
@@ -31,6 +28,10 @@ export class Address {
     @ManyToOne(() => Country, (country) => country.id)
     @JoinColumn({ name: "countryId" })
     country: Country;
+
+    @ManyToOne(() => City, (city) => city.id)
+    @JoinColumn()
+    city: City
 
     @ManyToOne(() => District, (district) => district.id)
     @JoinColumn({ name: "districtId" })
@@ -54,7 +55,7 @@ export class Address {
         const logRepository = AppDataSource.getRepository(Log);
         const log = Object.assign(new Log(), {
             type: "address",
-            process: "address information",
+            process: "address information", 
             user: this.user
         });
         await logRepository.save(log);

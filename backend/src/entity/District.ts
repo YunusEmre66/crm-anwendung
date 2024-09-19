@@ -1,19 +1,20 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from "typeorm"
 import { City } from "./City"
 import { Town } from "./Town"
+
 @Entity()
 export class District {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    id: number
 
     @Column()
-    name: string;
+    name: string
 
-    @ManyToMany(() => City, (city) => city.id)
+    @ManyToOne(() => City, (city) => city.id)
     @JoinColumn()
-    city: City[];
+    city: City
 
     @OneToMany(() => Town, (town) => town.district)
-    towns: Town[];
+    town: Town
 }

@@ -6,3 +6,4 @@ export enum UserConfirmedEnum {
     APPROVAL = 'approval',
     DENIED = 'denied'
 }
+

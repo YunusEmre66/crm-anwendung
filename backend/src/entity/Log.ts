@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn } from "typeorm"
 import { User } from "./User"
 import { LogTypeEnum } from "../enum/LogTypeEnum"
+
 @Entity()
 export class Log {
     @PrimaryGeneratedColumn()
@@ -12,9 +13,9 @@ export class Log {
     @Column({ type: 'varchar', length: 200, nullable: false })
     process: string;
 
-    @ManyToMany(() => User, user => user.id, { onDelete: 'CASCADE', nullable: false })
+    @ManyToOne(() => User, (user) => user.id, {onDelete: 'CASCADE', nullable: false})
     @JoinColumn({ name: "userId" })
-    user: User;
+    user: User
 
     @CreateDateColumn()
     createdAt: Date; // Renamed for consistency with common naming conventions
