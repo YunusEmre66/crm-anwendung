@@ -22,7 +22,8 @@ export class Address {
     location: string;
 
     @Column()
-    
+    @Column()
+
     @ManyToOne(() => User, (user) => user.id, { onDelete: 'CASCADE', nullable: false })
     @JoinColumn({ name: "userId" })
     user: User;
