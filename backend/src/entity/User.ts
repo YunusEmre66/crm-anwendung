@@ -11,16 +11,16 @@ import {
     BeforeUpdate,
     AfterUpdate,
     AfterLoad,
-  } from "typeorm";
-  import { validateOrReject, IsDefined, IsEmail, Length } from "class-validator"; //! validator : veri doğrulama işlemleri için kullanılır.
-  import { Phone } from "./Phone";
-  import { Email } from "./Email";
-  import { Address } from "./Address";
-  import * as bcrypt from "bcrypt";
-  import { AppDataSource } from "../data-source";
-  import { Log } from "./Log";
-  import { UserRoleEnum } from "../enum/UserRoleEnum";
-  import { UserConfirmedEnum } from "../enum/UserConfirmedEnum";
+} from "typeorm";
+import { validateOrReject, IsDefined, IsEmail, Length } from "class-validator"; //! validator : veri doğrulama işlemleri için kullanılır.
+import { Phone } from "./Phone";
+import { Email } from "./Email";
+import { Address } from "./Address";
+import * as bcrypt from "bcrypt";
+import { AppDataSource } from "../data-source";
+import { Log } from "./Log";
+import { UserRoleEnum } from "../enum/UserRoleEnum";
+import { UserConfirmedEnum } from "../enum/UserConfirmedEnum";
 
 
 @Entity()
@@ -81,21 +81,29 @@ export class User {
         await validateOrReject(this, { skipUndefinedProperties: true });
     }
 
+
+
     @AfterInsert()
     async userLog() {
         const logRepository = AppDataSource.getRepository(Log);
-        const log = new Log();
-        log.type = "user";
-        log.process = `Neu Benutzer erstellt: ${this.id} ${this.email} ${this.firstName} ${this.lastName}`;
-        log.user = this.id;
+        const log = Object.assign(new Log(), {
+            type: "user",
+            process:
+                "Neu Benutzer erstellt:  " +
+                this.id +
+                " " +
+                this.email +
+                " " +
+                this.firstName +
+                " " +
+                this.lastName,
+            user: this.id,
+        });
 
-        try {
-            await logRepository.save(log);
-        } catch (error) {
-            console.error("Error saving log:", error);
-            // Handle the error appropriately (e.g., send notifications, etc.)
-        }
+        logRepository.save(log);
     }
+
+
 
     @BeforeUpdate()
     async userBeforeUpdateLog() {
@@ -103,8 +111,8 @@ export class User {
 
         const logRepository = AppDataSource.getRepository(Log);
         const log = new Log();
-        log.type = "user";
-        log.process = `Vor Aktualisierung des Benutzers: ${this.id} ${this.email} ${this.firstName} ${this.lastName}`;
+        type = "user";
+        process = `Vor Aktualisierung des Benutzers: ${this.id} ${this.email} ${this.firstName} ${this.lastName}`;
         log.user = this.id;
 
         try {
@@ -121,8 +129,8 @@ export class User {
 
         const logRepository = AppDataSource.getRepository(Log);
         const log = new Log();
-        log.type = "user";
-        log.process = `Nach Aktualisierung des Benutzers: ${this.id} ${this.email} ${this.firstName} ${this.lastName}`;
+        type = "user";
+        process = `Nach Aktualisierung des Benutzers: ${this.id} ${this.email} ${this.firstName} ${this.lastName}`;
         log.user = this.id;
 
         try {
