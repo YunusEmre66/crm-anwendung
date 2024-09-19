@@ -1,7 +1,8 @@
-import { AfterInsert, AfterLoad, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, AfterInsert, AfterLoad, In, } from "typeorm";
+import { User } from "./User";
 import { AppDataSource } from "../data-source";
-
-
+import { Log } from "./Log";
+import { CalenderEnum } from "../enum/CalenderEnum";
 @Entity()
 
 export class Calender {

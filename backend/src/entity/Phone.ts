@@ -1,7 +1,8 @@
-import { Entity, Column, CreateDateColumn, DeleteDateColumn, JoinColumn, PrimaryGeneratedColumn, UpdateDateColumn, ManyToOne, AfterInsert } from "typeorm";
-import { AppDataSource } from "../data-source";
-import { ContactEnum } from "./ContactEnum"; // ContactEnum sınıfını doğru dosyadan import edin
-
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, AfterInsert } from "typeorm"
+import { User } from "./User"
+import { AppDataSource } from "../data-source"
+import { Log } from "./Log"
+import { ContactEnum } from "../enum/ContactEnum"
 
 
 @Entity()

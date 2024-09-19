@@ -1,7 +1,7 @@
-import { AfterInsert, CreateDateColumn, DeleteDateColumn, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, JoinColumn, OneToOne, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, AfterInsert } from "typeorm"
+import { User } from "./User"
 import { AppDataSource } from "../data-source";
-
-
+import { Log } from "./Log";
 
 @Entity("user_Info")
 

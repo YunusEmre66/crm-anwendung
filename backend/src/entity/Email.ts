@@ -1,11 +1,11 @@
-import { Entity, Column, CreateDateColumn, DeleteDateColumn, JoinColumn, PrimaryGeneratedColumn, UpdateDateColumn, ManyToOne, AfterInsert } from "typeorm";
-import { AppDataSource } from "../data-source";
-import { User } from "./User"; // User sınıfını doğru dosyadan import edin
-import { ContactEnum } from "./ContactEnum"; // ContactEnum sınıfını doğru dosyadan import edin
-import { Log } from "./Log"; // Log sınıfını doğru dosyadan import edin
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, AfterInsert } from "typeorm"
+import { User } from "./User"
+import { AppDataSource } from "../data-source"
+import { Log } from "./Log"
+import { ContactEnum } from "../enum/ContactEnum"
 
 @Entity()
-export class Phone {
+export class Email {
 
     @PrimaryGeneratedColumn()
     id: number;

@@ -1,10 +1,9 @@
-import { AfterInsert, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { AppDataSource } from "../data-source";
-import { User } from "./User"; // User sınıfını doğru dosyadan import edin
-import { Log } from "./Log"; // Log sınıfını doğru dosyadan import edin
-import { TaskEnum } from "./TaskEnum"; // TaskEnum sınıfını doğru dosyadan import edin
-import { TaskStatus } from "./TaskStatus"; // TaskStatus sınıfını doğru dosyadan import edin
-
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, AfterInsert } from "typeorm"
+import { User } from "./User"
+import { AppDataSource } from "../data-source"
+import { Log } from "./Log"
+import { TaskEnum } from "../enum/TaskEnum"
+import { TaskStatus } from "../enum/TaskStatus"
 @Entity()
 export class Task {
 

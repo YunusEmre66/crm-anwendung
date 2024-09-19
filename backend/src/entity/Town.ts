@@ -1,5 +1,6 @@
-import { Entity, Column, ManyToOne, JoinColumn, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from "typeorm"
+import { District } from "./District"
+import { Address } from "./Address"
 @Entity()
 export class Town {
     @PrimaryGeneratedColumn()

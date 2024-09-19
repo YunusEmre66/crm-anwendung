@@ -2,7 +2,6 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMan
 import { Address } from "./Address"
 import { District } from "./District"
 import { Country } from "./Country"
-
 @Entity({
     orderBy: {
         id: 'DESC'

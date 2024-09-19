@@ -1,12 +1,12 @@
-import { AfterInsert, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { District } from "./District";
-import { Town } from "./Town";
-import { Country } from "./Country"; // Country sınıfını doğru dosyadan import edin
-import { User } from "./User"; // User sınıfını doğru dosyadan import edin
-import { Log } from "./Log"; // Log sınıfını doğru dosyadan import edin
-import { ContactEnum } from "./ContactEnum"; // ContactEnum sınıfını doğru dosyadan import edin
-import { AppDataSource } from "../data-source";
-
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, AfterInsert } from "typeorm"
+import { User } from "./User"
+import { AppDataSource } from "../data-source"
+import { Log } from "./Log"
+import { ContactEnum } from "../enum/ContactEnum"
+import { Country } from "./Country"
+import { City } from "./City"
+import { District } from "./District"
+import { Town } from "./Town"
 @Entity("addresses")
 export class Address {
     @PrimaryGeneratedColumn()

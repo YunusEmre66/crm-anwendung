@@ -1,7 +1,6 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToMany, JoinColumn } from "typeorm";
-import { User } from "./User";
-import { LogTypeEnum } from "./LogTypeEnum"; // Ensure that LogTypeEnum is imported correctly
-
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn } from "typeorm"
+import { User } from "./User"
+import { LogTypeEnum } from "../enum/LogTypeEnum"
 @Entity()
 export class Log {
     @PrimaryGeneratedColumn()

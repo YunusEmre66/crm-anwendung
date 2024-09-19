@@ -1,7 +1,6 @@
-import { Entity, Column, JoinColumn, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { City } from "./City"; // City sınıfını doğru dosyadan import edin
-import { Town } from "./Town"; // Town sınıfını doğru dosyadan import edin
-
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, OneToMany } from "typeorm"
+import { City } from "./City"
+import { Town } from "./Town"
 @Entity()
 export class District {
 

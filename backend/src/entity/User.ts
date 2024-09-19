@@ -1,7 +1,26 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, BeforeInsert, AfterInsert, AfterUpdate, BeforeUpdate, AfterLoad } from 'typeorm';
-import { IsDefined, IsEmail, Length, validateOrReject } from 'class-validator';
-import { AppDataSource } from '../data-source';
-
+import {
+    Entity,
+    PrimaryGeneratedColumn,
+    Column,
+    OneToMany,
+    CreateDateColumn,
+    UpdateDateColumn,
+    DeleteDateColumn,
+    BeforeInsert,
+    AfterInsert,
+    BeforeUpdate,
+    AfterUpdate,
+    AfterLoad,
+  } from "typeorm";
+  import { validateOrReject, IsDefined, IsEmail, Length } from "class-validator"; //! validator : veri doğrulama işlemleri için kullanılır.
+  import { Phone } from "./Phone";
+  import { Email } from "./Email";
+  import { Address } from "./Address";
+  import * as bcrypt from "bcrypt";
+  import { AppDataSource } from "../data-source";
+  import { Log } from "./Log";
+  import { UserRoleEnum } from "../enum/UserRoleEnum";
+  import { UserConfirmedEnum } from "../enum/UserConfirmedEnum";
 
 @Entity()
 export class User {
