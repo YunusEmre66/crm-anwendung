@@ -66,4 +66,44 @@ export class AuthController {
             next({ error: res, status: 404 });
         }
     }
+    //! update
+
+    async update(request: Request, response, Response, next: NextFunction) {
+        const user: any = await getUserFromJWT(request)
+
+        const id = user.id
+        const { firstName, lastName }: RegisterModel = request.body;
+
+        try {
+            const update = await this.userRepository.update({ id }, { firstName, lastName })
+            return { status: true, update }
+        } catch (error: any) {
+            next({ error, status: 404 })
+
+        }
+    }
+
+    //! changepassword
+
+    async changePassword(request: Request, response: Response, next: NextFunction) {
+        const user: any = await getUserFromJWT(request)
+
+        const id = user.id
+        const { oldPassword, newPassword } = request.body;
+
+        const isValid = await bcrypt.compare(oldPassword, user.password)
+
+        if (isValid) {
+            const newPasswordBcrypt = await bcrypt.hash(newPassword, 10)
+            const update = await this.userRepository.update({ id }, { password: newPasswordBcrypt })
+            return { status: true, update }
+
+        } else {
+            const error: any = new Error("şifre geçersiz")
+            next({ error, status: 404 })
+        }
+
+    }
+
+
 }
