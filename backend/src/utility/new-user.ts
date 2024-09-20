@@ -1,5 +1,7 @@
 import { AppDataSource } from "../data-source"
 import { User } from "../entity/User"
+import { RegisterModel } from "../model/RegisterModel"
+
 
 
 

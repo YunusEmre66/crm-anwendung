@@ -3,7 +3,7 @@ import { User } from "./User"
 import { AppDataSource } from "../data-source";
 import { Log } from "./Log";
 
-@Entity("user_Info")
+@Entity()
 
 export class UserInfo {
     @PrimaryGeneratedColumn()
