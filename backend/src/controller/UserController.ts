@@ -1,14 +1,25 @@
 import { AppDataSource } from "../data-source"
 import { NextFunction, Request, Response } from "express"
 import { User } from "../entity/User"
+import { Email } from "../entity/Email"
+import { Phone } from "../entity/Phone"
+import { Address } from "../entity/Address"
+import { UserModel } from "../model/UserModel"
+
 
 export class UserController {
 
     private userRepository = AppDataSource.getRepository(User)
+    private emailRepository = AppDataSource.getRepository(Email)
+    private phoneRepository = AppDataSource.getRepository(Phone)
+    private addressRepository = AppDataSource.getRepository(Address)
+
 
     async all(request: Request, response: Response, next: NextFunction) {
-        return this.userRepository.find()
+        //! buradan devam
     }
+
+    //! all
 
     async one(request: Request, response: Response, next: NextFunction) {
         const id = parseInt(request.params.id)

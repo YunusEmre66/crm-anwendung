@@ -7,7 +7,7 @@ import { Country } from "./Country"
 import { City } from "./City"
 import { District } from "./District"
 import { Town } from "./Town"
-@Entity("addresses")
+@Entity()
 export class Address {
     @PrimaryGeneratedColumn()
     id: number;
