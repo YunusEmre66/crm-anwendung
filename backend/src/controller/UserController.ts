@@ -113,16 +113,6 @@ export class UserController {
                 district,
                 town
             })
-            const newAddress = Object.assign(new Address(), {
-                addressType,
-                addressLine,
-                location,
-                user: userId,
-                country,
-                city,
-                district,
-                town
-            })
             await this.addressRepository.save(newAddress)
 
             return {
