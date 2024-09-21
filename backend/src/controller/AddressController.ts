@@ -23,6 +23,8 @@ export class AddressController {
         return { data: addresses, status: true }
     }
 
+    //!one
+
     async one(request: Request, response: Response, next: NextFunction) {
         const id = parseInt(request.params.id)
         const address = await this.addressRepository.findOne({
@@ -33,9 +35,36 @@ export class AddressController {
                 addressType: true,
                 addressLine: true,
                 location: true,
-                user: {id: true, firstName: true, lastName: true}
+                user: { id: true, firstName: true, lastName: true }
             }
         })
+
+        if (!address) {
+            return { message: "unregistered address", status: false }
+        }
+        return { data: address, status: true }
+    }
+
+    //!save 
+
+    async save(request: Request, response: Response, next: NextFunction) {
+        const { userId, addressType, addressLine, location } = request.body;
+        console.log(userId)
+
+        const address = Object.assign(new Address(), {
+            user: userId,
+            addressType,
+            addressLine,
+            location
+        })
+
+        try {
+            const insert = await this.addressRepository.save(address)
+            return { data: insert, status: false }
+        } catch (error) {
+            next({ error, status: false })
+
+        }
     }
 
 }
