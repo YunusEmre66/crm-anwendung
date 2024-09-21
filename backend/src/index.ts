@@ -3,11 +3,9 @@ import * as bodyParser from "body-parser"
 import { Request, Response, NextFunction} from "express"
 import { AppDataSource } from "./data-source"
 import { Routes } from "./routes"
-import { User } from "./entity/User"
 require('dotenv').config();
 import cors = require("cors")
 import {getUserFromJWT} from "./utility/getUserIdFromJWT";
-import { error } from "console"
 
 const PORT = process.env.PORT || 3000;
 
@@ -21,28 +19,28 @@ AppDataSource.initialize().then(async () => {
 
 
 
-    app.all("*", async(request : Request, response : Response, next : express.NextFunction) => {
-        console.log("bir istek yapılmıştır"); 
-        if (request.url.endsWith('login') ||request.url.endsWith('/register')) {
-            next();
+    app.all('*', async (request: Request, response: Response, next: NextFunction) => { //! burdaki all = get,post,put,delete işlemlerini yapabiliriz. * işareti her urlye karşılık gelioyor
+        console.log('bir istek yapıldı'); //! projem çalıştığında console log kısmına bir istek yapıldı yazısını yazdırır.
+        if (request.url.endsWith('/login') || request.url.endsWith('/register')) {  //! login ve register işlemlerinde yetkilendirme yapmadık. çünkü kullanıcı henüz giriş yapmadı. yetkilendirme için token oluşturmadık.
+            next()  //! next : bir sonraki işlemi yapar. bu işlemden sonra aşağıda ki foreach bloğu çalışır, oradan controllera gider. EĞER /is-login ise ....
         } else {
 
+            //! YETKISI VARSA İŞLEM YAPABİLİR. EMAIL VE ONAY DURUMUNA GÖRE İŞLEM YAPABİLİR. ARTIK LOGIN OLMUŞ OLAN KULLANICI İŞLEM YAPABİLİR.
             try {
-                const user : any =await getUserFromJWT(request) 
-                if (user.confirmed ==='approval' || user.confirmed === 'email') {
-                    if (request.url.endsWith('is-login')) {
-                        response.status(200).json({status:true})
+                const user: any = await getUserFromJWT(request)  //! user bilgisi oradan döndüğü an aşağıdaki işlemleri yapar.
+
+                if (user.confirmed === 'approval' || user.confirmed === 'email') {  //! kullanıcı onaylandıysa veya email onayı yapıldıysa işlem yapabilir. 
+                    if (request.url.endsWith('/is-login')) {
+                        response.status(200).json({ status: true })
                     } else {
                         next()
                     }
                 } else {
-                    response.status(401).json ({status :false, message : "Autorisierungsfehler. Bitte wenden Sie sich an den Administrator."})
+                    response.status(401).json({ status: false, message: 'yetkilendirme hatası. lütfen yöneticiye danışın' }) //! ÖNCEKİ HALİ PENDİNG Dİ BUNUN
                 }
-            } catch (error :any) {
-                response.status(401).json ({ status : false, message : error.message})
-                
+            } catch (error: any) {
+                response.status(401).json({ status: false, message: error.message })
             }
-            
         }
     })
 
