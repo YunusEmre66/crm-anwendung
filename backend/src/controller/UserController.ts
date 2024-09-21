@@ -70,17 +70,49 @@ export class UserController {
     }
     //! newUser
     async newUser(request: Request, response: Response, next: NextFunction) {
-        const id = parseInt(request.params.id)
 
-        let userToRemove = await this.userRepository.findOneBy({ id })
+        const { firstName, lastName, email, emailType, phone, phoneType, addressType, addressLine,
+            location, country, city, district, town
+        } = request.body;
 
-        if (!userToRemove) {
-            return "this user not exist"
+        const user = Object.assign(new User(), {
+            firstName: firstName,
+            lastName,
+            email,
+            password: (Math.random() * 1000000).toFixed(0)
+        })
+
+        try {
+            const insert = await this.userRepository.save(user);
+            const userId = insert.id
+
+            const newEmail = Object.assign(new Email(), {
+                emailType: emailType,
+                emailAddress: email,
+                user: userId
+            })
+
+            await this.emailRepository.save (newEmail)
+
+            const newPhone = Object.assign(new Phone(), {
+                phoneType:phoneType,
+                phoneNumber: phone,
+                user:userId
+            })
+
+            await this.phoneRepository.save(newPhone)
+
+            const newAddress = Object.assign(new Address(), {
+                addressType,
+                addressLine,
+                location,
+                user:userId,
+                countryq,
+            })
+
+
+        } catch (error) {
+
         }
 
-        await this.userRepository.remove(userToRemove)
-
-        return "user has been removed"
     }
-
-}
