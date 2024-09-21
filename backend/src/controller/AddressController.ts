@@ -1,9 +1,8 @@
 import { AppDataSource } from "../data-source"
-import { NextFunction, Request, response, Response } from "express"
+import { NextFunction, Request, Response } from "express"
 import { Address } from "../entity/Address"
 import { AddressModel } from "../model/AddressModel"
-import { request } from "http"
-import { TreeRepositoryUtils } from "typeorm"
+import { request } from 'http';
 
 export class AddressController {
     private addressRepository = AppDataSource.getRepository(Address)
@@ -65,6 +64,46 @@ export class AddressController {
             next({ error, status: false })
 
         }
+    }
+
+    //!update 
+    async update(request: Request, response: Response, next: NextFunction) {
+        const id = parseInt(request.params.id)
+        const { userId, addressType, addressLine, location } = request.body;
+
+        try {
+            const update = await this.addressRepository.update({ id },
+                {
+                    user: userId,
+                    addressType,
+                    addressLine,
+                    location
+                }
+            )
+            return {
+                data: update, status: update.affected > 0
+            }
+        } catch (error) {
+
+            next({ error, status: 404 })
+        }
+    }
+
+    //!remove 
+    async remove(request: Request, response: Response, next: NextFunction) {
+        const id = parseInt(request.params.id)
+
+        let addressToRemove = await this.addressRepository.findOneBy({ id })
+
+        if (!addressToRemove) {
+            return {
+                message: "this address not exist", status: false
+            }
+        }
+
+        await this.addressRepository.remove(addressToRemove)
+
+        return { message: "address has been remove", status: true }
     }
 
 }
