@@ -1,3 +1,4 @@
+import { AddressController } from "./controller/AddressController"
 import { AuthController } from "./controller/AuthController"
 import { UserController } from "./controller/UserController"
 
@@ -45,4 +46,17 @@ export const Routes = [
     route: "/login",
     controller: AuthController,
     action: "login"
+},
+//! addressController 
+
+{ 
+    method:"get",
+    route:"/addresses",
+    controller: AddressController,
+    action:"all"  
+
+
+
 }]
+
+
