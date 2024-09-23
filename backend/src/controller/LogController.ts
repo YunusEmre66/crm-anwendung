@@ -14,23 +14,18 @@ export class LogController {
         }
     }
     //!one
+
     async one(request: Request, response: Response, next: NextFunction) {
-        try {
-            const id = parseInt(request.params.id);
+        const id = parseInt(request.params.id)
 
-            const log = await this.logRepository.findOne({
-                where: { id }
-            });
+        const log = await this.logRepository.findOne({
+            where: { id }
+        })
 
-            if (!log) {
-                return response.status(404).json({ message: "unregistered log" });
-            }
-
-            return response.json(log);
-        } catch (error) {
-            next(error); // Hata durumunda hata yönetimi için next fonksiyonunu çağır
+        if (!log) {
+            return "unregistered log"
         }
-
+        return log
     }
     //!save
     async save(request: Request, response: Response, next: NextFunction) {
