@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { AppDataSource } from '../data-source';
 import { Log } from '../entity/Log';
-import { request } from 'http';
 
 export class LogController {
     private logRepository = AppDataSource.getRepository(Log);
@@ -53,5 +52,17 @@ export class LogController {
         })
     }
 
-    
+    async remove(request: Request, response: Response, next: NextFunction) {
+        const id = parseInt(request.params.id)  //! url den gelen string ifadeyi integere çevirir, okunabilecek hale getirir 
+
+        let logToRemove = await this.logRepository.findOneBy({ id })
+
+        if (!logToRemove) {
+            return "this log not exist"
+        }
+
+        await this.logRepository.remove(logToRemove)
+        return "log has been removed"
+    }
+
 }
