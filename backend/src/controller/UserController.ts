@@ -30,7 +30,7 @@ export class UserController {
                 role: k.role,
                 confirmed: k.confirmed,
                 createdAt: k.createdAt
-            } as UserModel  //! modelleri girdikten sonra k. içindeki veriler hazır olarak dönüyor.  
+            } as UserModel  
         })
 
         return { status: true, data: users }

@@ -19,24 +19,24 @@ AppDataSource.initialize().then(async () => {
 
 
 
-    app.all('*', async (request: Request, response: Response, next: NextFunction) => { //! burdaki all = get,post,put,delete işlemlerini yapabiliriz. * işareti her urlye karşılık gelioyor
-        console.log('bir istek yapıldı'); //! projem çalıştığında console log kısmına bir istek yapıldı yazısını yazdırır.
-        if (request.url.endsWith('/login') || request.url.endsWith('/register')) {  //! login ve register işlemlerinde yetkilendirme yapmadık. çünkü kullanıcı henüz giriş yapmadı. yetkilendirme için token oluşturmadık.
-            next()  //! next : bir sonraki işlemi yapar. bu işlemden sonra aşağıda ki foreach bloğu çalışır, oradan controllera gider. EĞER /is-login ise ....
+    app.all('*', async (request: Request, response: Response, next: NextFunction) => {
+        console.log('bir istek yapıldı'); 
+        if (request.url.endsWith('/login') || request.url.endsWith('/register')) {  
+            next()  
         } else {
 
-            //! YETKISI VARSA İŞLEM YAPABİLİR. EMAIL VE ONAY DURUMUNA GÖRE İŞLEM YAPABİLİR. ARTIK LOGIN OLMUŞ OLAN KULLANICI İŞLEM YAPABİLİR.
+           
             try {
-                const user: any = await getUserFromJWT(request)  //! user bilgisi oradan döndüğü an aşağıdaki işlemleri yapar.
+                const user: any = await getUserFromJWT(request)  
 
-                if (user.confirmed === 'approval' || user.confirmed === 'email') {  //! kullanıcı onaylandıysa veya email onayı yapıldıysa işlem yapabilir. 
+                if (user.confirmed === 'approval' || user.confirmed === 'email') { 
                     if (request.url.endsWith('/is-login')) {
                         response.status(200).json({ status: true })
                     } else {
                         next()
                     }
                 } else {
-                    response.status(401).json({ status: false, message: 'yetkilendirme hatası. lütfen yöneticiye danışın' }) //! ÖNCEKİ HALİ PENDİNG Dİ BUNUN
+                    response.status(401).json({ status: false, message: 'yetkilendirme hatası. lütfen yöneticiye danışın' }) 
                 }
             } catch (error: any) {
                 response.status(401).json({ status: false, message: error.message })
@@ -48,7 +48,7 @@ AppDataSource.initialize().then(async () => {
     Routes.forEach(route => {
         (app as any)[route.method](`/api/v1${route.route}`, async (req: Request, res: Response, next: Function) => {
             const result = (new (route.controller as any))[route.action](req, res, next)
-            if (result instanceof Promise) {  //!é promise ise then ile result döndür ve sonucu gönder
+            if (result instanceof Promise) {  
                 result.then(result => result !== null && result !== undefined ? res.send(result) : undefined)
             } else if (result !== null && result !== undefined) {
                 res.json(result)
