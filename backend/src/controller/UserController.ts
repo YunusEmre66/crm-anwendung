@@ -20,7 +20,9 @@ export class UserController {
     //! all
     async all(request: Request, response: Response, next: NextFunction) {
         const users: Array<UserModel> = (await this.userRepository.find()).map((k: UserModel) => {
+            console.log(users)
             return {
+
                 id: k.id,
                 firstName: k.firstName,
                 lastName: k.lastName,
@@ -161,5 +163,6 @@ export class UserController {
         return { message: "user has been removed", status: true }
     }
 
-
 }
+
+//! bitti buradan devam postmann kontrolleri yapılmadı henüz
