@@ -165,4 +165,3 @@ export class UserController {
 
 }
 
-//! bitti buradan devam postmann kontrolleri yapılmadı henüz
