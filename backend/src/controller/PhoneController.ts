@@ -82,6 +82,19 @@ export class PhoneController {
         }
     }
 
+    async remove(request: Request, response: Response, next: NextFunction) {
+        const id = parseInt(request.params.id)
+
+        let phoneToRemove = await this.phoneRepository.findOneBy({ id })
+
+        if (!phoneToRemove) {
+            return { message: "this phone not exist", status: false }
+        }
+        await this.phoneRepository.remove(phoneToRemove)
+
+        return { message: "phone has been removed", status: true }
+    }
+
 
 
 

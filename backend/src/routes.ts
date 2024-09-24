@@ -1,6 +1,7 @@
 import { AddressController } from "./controller/AddressController"
 import { AuthController } from "./controller/AuthController"
 import { LogController } from "./controller/LogController"
+import { PhoneController } from "./controller/PhoneController"
 import { UserController } from "./controller/UserController"
 
 export const Routes = [
@@ -90,6 +91,35 @@ export const Routes = [
         route: "/logs/:id",
         controller: LogController,
         action: "remove"
-    }]
+    },
+    
+    //! PHONE
+
+    {
+        method: "get",
+        route: "/phones",
+        controller: PhoneController,
+        action: "all"
+    }, {
+        method: "get",
+        route: "/phones/:id",
+        controller: PhoneController,
+        action: "one"
+    }, {
+        method: "post",
+        route: "/phones",
+        controller: PhoneController,
+        action: "save"
+    }, {
+        method: "put",
+        route: "/phones/:id",
+        controller: PhoneController,
+        action: "update"
+    }, {
+        method: "delete",
+        route: "/phones/:id",
+        controller: PhoneController,
+        action: "remove"
+    },]
 
 
