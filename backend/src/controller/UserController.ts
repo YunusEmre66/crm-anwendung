@@ -19,21 +19,22 @@ export class UserController {
 
     //! all
     async all(request: Request, response: Response, next: NextFunction) {
-        const users: Array<UserModel> = (await this.userRepository.find()).map((k: UserModel) => {
-            console.log(users)
-            return {
-
-                id: k.id,
-                firstName: k.firstName,
-                lastName: k.lastName,
-                email: k.email,
-                role: k.role,
-                confirmed: k.confirmed,
-                createdAt: k.createdAt
-            } as UserModel  
-        })
-
-        return { status: true, data: users }
+        try {
+            const users = await this.userRepository.find();
+            const formattedUsers = users.map((user: UserModel) => ({
+                id: user.id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                role: user.role,
+                confirmed: user.confirmed,
+                createdAt: user.createdAt
+            }));
+    
+            return response.json({ status: true, data: formattedUsers });
+        } catch (error) {
+            next(error); // Hata durumunda hata yönetimi middleware'ine yönlendirin
+        }
     }
 
     //!one

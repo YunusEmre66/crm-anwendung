@@ -12,7 +12,9 @@ import { Country } from "./entity/Country"
 import { City } from "./entity/City"
 import { District } from "./entity/District"
 import { Town } from "./entity/Town"
-require('dotenv').config(); 
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 
 export const AppDataSource = new DataSource({
     type: process.env.DB_TYPE as any,
