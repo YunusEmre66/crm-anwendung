@@ -57,13 +57,18 @@ AppDataSource.initialize().then(async () => {
     })
 
     app.use((error: any, request: Request, response: Response, next: NextFunction) => {
-        return response.status(error.status).json({  
-            status: false,  
-            code: error.error.code, 
-            errno: error.error.errno,
-            message: error.error.message 
-        })
-     })
+        const statusCode = error.status || 500;
+        const errorCode = error.code || 'UNKNOWN_ERROR';
+        const errorMessage = error.message || 'An unknown error occurred';
+        const errorErrno = error.errno || 'UNKNOWN_ERRNO';
+    
+        return response.status(statusCode).json({
+            status: false,
+            code: errorCode,
+            errno: errorErrno,
+            message: errorMessage
+        });
+    });
 
     
 
