@@ -11,6 +11,7 @@ AppDataSource.initialize().then(async () => {
     // test
     // create express app
     const app = express()
+    app.use(express.json());
     app.use(bodyParser.json())
     app.use(express.static('public'))
     app.use(cors({ credentials: true }))  //! olmazsa olmaz 

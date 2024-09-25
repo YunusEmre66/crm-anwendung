@@ -151,16 +151,23 @@ export class UserController {
 
     //!remove 
     async remove(request: Request, response: Response, next: NextFunction) {
-        const id = parseInt(request.params.id)
-
-        let userToRemove = await this.userRepository.findOneBy({ id })
-        if (!userToRemove) {
-            return { message: "this user not exist", status: false }
+        try {
+            const id = parseInt(request.params.id);
+            if (isNaN(id)) {
+                return response.status(400).json({ status: false, message: 'Invalid ID' });
+            }
+    
+            let userToRemove = await this.userRepository.findOneBy({ id });
+            if (!userToRemove) {
+                return response.status(404).json({ status: false, message: 'User not found' });
+            }
+    
+            await this.userRepository.remove(userToRemove);
+    
+            return response.json({ message: "User has been removed", status: true });
+        } catch (error) {
+            next(error); // Hata durumunda hata yönetimi middleware'ine yönlendirin
         }
-
-        await this.userRepository.remove(userToRemove)
-
-        return { message: "user has been removed", status: true }
     }
 
 }
