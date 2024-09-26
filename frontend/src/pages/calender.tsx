@@ -71,10 +71,19 @@ const Calender = () => {
                                 <tr key={index}>
                                     <td>{calender.title}</td>
                                     <td>{calender.description}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>{calender.calenderType}</td>
+                                    <td>{calender.user?.firstName} {calender.user?.lastName}</td>
+                                    <td>{calender.participipants?.map((k: any) => {
+                                        return (
+                                            <>
+                                                <div>{k.name}</div>
+                                            </>
+                                        )
+                                    })}</td>
+                                    <td>
+                                        <button onClick={() => handleEdit(calender)}>Edit</button>
+
+                                    </td>
 
                                 </tr>
                             )
