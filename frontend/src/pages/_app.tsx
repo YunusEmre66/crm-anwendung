@@ -7,9 +7,15 @@ import { AuthProvider } from "@/context/auth-context"; //! AuthProvider demek : 
 export default function App({ Component, pageProps }: AppProps) {
     return (
         <Provider store={store}>
-            <AuthProvider>
+            <AuthProvider>  //!Bu bileşen, uygulamanın her yerinde kimlik doğrulama durumunu yönetmek için kullanılır
+                            //!AuthProvider bileşeni, çocuk bileşenlerine kimlik doğrulama bilgilerini sağlar.
                 <Component {...pageProps} />
             </AuthProvider>
         </Provider>
     )
 }
+
+//! Bu yapı, uygulamanın her sayfasında ortak olan sağlayıcıları ve 
+//!yapılandırmaları merkezi bir yerden yönetmeyi sağlar.
+//! Bu sayede, Redux store ve kimlik doğrulama gibi özellikler 
+//!tüm uygulama genelinde kolayca kullanılabilir hale gelir.
