@@ -9,7 +9,7 @@ export const loginSlice = createSlice({
     name: 'login',
     reducers: {
         setToken: (state, action: PayloadAction<string>) => {
-            localStorage.setItem('token', action.payload)
+            localStorage.setItem('token', action.payload)  //! günceller ve saklı tutar localstorage
             state.token = action.payload
         }
     }
