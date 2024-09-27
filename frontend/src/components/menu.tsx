@@ -5,7 +5,7 @@ import React from "react";
 // import { useSelector } from "react-redux";
 
 const Menu = () => {
-  const {data} = useGetIsLoginQuery('/is-login')
+  const {data, error, isLoading} = useGetIsLoginQuery('/is-login')
   
   return (
     <nav className="bg-white border-gray-200 dark:bg-gray-900">
