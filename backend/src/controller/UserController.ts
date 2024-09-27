@@ -3,11 +3,10 @@ import { NextFunction, Request, Response } from "express"
 import { User } from "../entity/User"
 import { UserModel } from "../model/UserModel"
 import { RegisterModel } from "../model/RegisterModel"
+import { BaseUserModel } from "../model/BaseUserModel"
 import { Email } from "../entity/Email"
 import { Phone } from "../entity/Phone"
 import { Address } from "../entity/Address"
-import { CreatedAt } from "sequelize-typescript"
-import { request } from 'http';
 
 export class UserController {
 
@@ -16,13 +15,9 @@ export class UserController {
     private phoneRepository = AppDataSource.getRepository(Phone)
     private addressRepository = AppDataSource.getRepository(Address)
 
-
-    //! all
     async all(request: Request, response: Response, next: NextFunction) {
         const users: Array<UserModel> = (await this.userRepository.find()).map((k: UserModel) => {
-            console.log(users)
             return {
-
                 id: k.id,
                 firstName: k.firstName,
                 lastName: k.lastName,
@@ -30,13 +25,11 @@ export class UserController {
                 role: k.role,
                 confirmed: k.confirmed,
                 createdAt: k.createdAt
-            } as UserModel  //! modelleri girdikten sonra k. içindeki veriler hazır olarak dönüyor.  
+            } as UserModel
         })
 
         return { status: true, data: users }
     }
-
-    //!one
 
     async one(request: Request, response: Response, next: NextFunction) {
         const id = parseInt(request.params.id)
@@ -49,8 +42,10 @@ export class UserController {
             return "unregistered user"
         }
         return {
-            status: true, data: {
-                firstName: user.firstName, lastName: user.lastName,
+            status: true,
+            data: {
+                firstName: user.firstName,
+                lastName: user.lastName,
                 email: user.email,
                 role: user.role,
                 confirmed: user.confirmed,
@@ -58,7 +53,7 @@ export class UserController {
             } as UserModel
         }
     }
-    //!save
+
     async save(request: Request, response: Response, next: NextFunction) {
         const { firstName, lastName, email, password }: RegisterModel = request.body;
 
@@ -69,17 +64,28 @@ export class UserController {
             password
         })
 
-        return this.userRepository.save(user)
+        return await this.userRepository.save(user)
     }
-    //! newUser
-    async newUser(request: Request, response: Response, next: NextFunction) {
 
-        const { firstName, lastName, email, emailType, phone, phoneType, addressType, addressLine,
-            location, country, city, district, town
+    async newUser(request: Request, response: Response, next: NextFunction) {
+        const { 
+            firstName, 
+            lastName, 
+            email,
+            emailType,
+            phone,
+            phoneType,
+            addressType,
+            addressLine,
+            location,
+            country,
+            city,
+            district,
+            town
         } = request.body;
 
         const user = Object.assign(new User(), {
-            firstName: firstName,
+            firstName,
             lastName,
             email,
             password: (Math.random() * 1000000).toFixed(0)
@@ -115,18 +121,17 @@ export class UserController {
                 district,
                 town
             })
-            await this.addressRepository.save(newAddress)
 
-            return {
-                data: {
-                    firstName: insert.firstName,
-                    lastName: insert.lastName,
-                    email: insert.email,
-                    role: insert.role,
-                    confirmed: insert.confirmed,
-                    createdAt: insert.createdAt
-                } as UserModel, status: true
-            }
+            await this.addressRepository.save(newAddress)
+            
+            return { data: {
+                firstName: insert.firstName,
+                lastName: insert.lastName,
+                email: insert.email,
+                role: insert.role,
+                confirmed: insert.confirmed,
+                createdAt: insert.createdAt
+            } as UserModel, status: true }
         } catch (error) {
             if (error.code === undefined) {
                 error.message = error.map((k: any) => {
@@ -137,8 +142,7 @@ export class UserController {
         }
     }
 
-    //! update 
-    async update(request: Request, respnse: Response, next: NextFunction) {
+    async update(request: Request, response: Response, next: NextFunction) {
         const id = parseInt(request.params.id)
         const { firstName, lastName } = request.body;
 
@@ -149,20 +153,18 @@ export class UserController {
         return { update, status: true }
     }
 
-    //!remove 
     async remove(request: Request, response: Response, next: NextFunction) {
         const id = parseInt(request.params.id)
 
         let userToRemove = await this.userRepository.findOneBy({ id })
+
         if (!userToRemove) {
-        return response.status(400).json({ status: false, message: 'ID is required' });
+        return { message: "this user not exist", status: false }
         }
 
         await this.userRepository.remove(userToRemove)
 
         return { message: "user has been removed", status: true }
-    }
+     }
 
 }
-
-//! 
