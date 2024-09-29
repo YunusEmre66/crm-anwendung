@@ -37,4 +37,4 @@ export const loginApi = createApi({
     }),
 })
 
-export const { useGetIsLoginQuery, useLoginMutation } = loginApi //! burdaki get ve post ile gelen bütün veriler diğer sayfalarda kullanılabilecek
+export const { useGetIsLoginQuery, useLoginMutation } = loginApi
